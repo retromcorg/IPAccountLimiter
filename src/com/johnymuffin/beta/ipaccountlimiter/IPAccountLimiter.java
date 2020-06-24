@@ -1,9 +1,12 @@
 package com.johnymuffin.beta.ipaccountlimiter;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class IPAccountLimiter extends JavaPlugin {
@@ -15,6 +18,8 @@ public class IPAccountLimiter extends JavaPlugin {
     //Config
     private IPAccountStorage ipAccountStorage;
     private IPAccountConfig ipAccountConfig;
+    //Poseidon
+    private boolean poseidonPresent = false;
 
     @Override
     public void onEnable() {
@@ -27,10 +32,46 @@ public class IPAccountLimiter extends JavaPlugin {
 
         ipAccountStorage = new IPAccountStorage(plugin);
         IPAccountListener ipAccountListener = new IPAccountListener(plugin);
-        Bukkit.getServer().getPluginManager().registerEvents(ipAccountListener, plugin);
+        Bukkit.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, ipAccountListener, Event.Priority.Low, plugin);
+        Bukkit.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, ipAccountListener, Event.Priority.Low, plugin);
+
+        if (testClassExistence("com.projectposeidon.api.PoseidonUUID")) {
+            poseidonPresent = true;
+            logInfo("Project Poseidon detected, using valid UUIDs.");
+        } else {
+            logInfo("Project Poseidon support disabled.");
+        }
 
 
     }
+
+
+    public UUID getUUIDFromPlayer(Player player) {
+        if (poseidonPresent) {
+            try {
+                UUID uuid = player.getUniqueId();
+                return uuid;
+            } catch (Exception e) {
+                plugin.logInfo("Error getting UUID from player " + player.getName() + " with Project Poseidon support, using offline uuid instead.");
+            }
+        }
+        return generateOfflineUUID(player.getName());
+    }
+
+    private UUID generateOfflineUUID(String username) {
+        return UUID.nameUUIDFromBytes(username.getBytes());
+    }
+
+
+    private boolean testClassExistence(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
 
     @Override
     public void onDisable() {
@@ -49,5 +90,9 @@ public class IPAccountLimiter extends JavaPlugin {
 
     public IPAccountConfig getIpAccountConfig() {
         return ipAccountConfig;
+    }
+
+    public boolean isPoseidonPresent() {
+        return poseidonPresent;
     }
 }
