@@ -21,7 +21,7 @@ public class IPAccountStorage {
         this.plugin = plugin;
         storageFile = new File(plugin.getDataFolder(), "storage.json");
 
-        accountTimeout = 15552000;
+        accountTimeout = plugin.getIpAccountConfig().getConfigInteger("forget-ip-after");
 
         if (!storageFile.exists()) {
             storageFile.getParentFile().mkdirs();
@@ -53,7 +53,6 @@ public class IPAccountStorage {
 
     private JSONArray getIPArray(String ip) {
         if (jsonData.containsKey(ip)) {
-            plugin.logInfo("Found info for ip: " + ip);
             return (JSONArray) jsonData.get(ip);
         }
         return new JSONArray();
@@ -63,13 +62,10 @@ public class IPAccountStorage {
     public int otherAccounts(UUID uuid, String ip) {
         int count = 0;
         JSONArray ipArray = getIPArray(ip);
-        plugin.logInfo("IPs in array: " + ipArray.size());
         for (int i = 0; i < ipArray.size(); i++) {
             JSONObject userObject = (JSONObject) ipArray.get(i);
-            plugin.logInfo("Testing: " + userObject.get("uuid"));
             if (userObject.containsKey("unix") && Long.valueOf(String.valueOf(userObject.get("unix"))) > ((System.currentTimeMillis() / 1000L) - accountTimeout)) {
                 if (!(userObject.containsKey("uuid") && userObject.get("uuid").equals(uuid.toString()))) {
-                    plugin.logInfo("Match found for " + ip + ", " + userObject.get("uuid") + ":" + userObject.get("unix"));
                     count = count + 1;
                 }
 

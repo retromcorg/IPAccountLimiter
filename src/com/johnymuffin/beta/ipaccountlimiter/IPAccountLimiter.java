@@ -14,6 +14,7 @@ public class IPAccountLimiter extends JavaPlugin {
     private PluginDescriptionFile pdf;
     //Config
     private IPAccountStorage ipAccountStorage;
+    private IPAccountConfig ipAccountConfig;
 
     @Override
     public void onEnable() {
@@ -22,6 +23,8 @@ public class IPAccountLimiter extends JavaPlugin {
         pdf = this.getDescription();
         pluginName = pdf.getName();
         log.info("[" + pluginName + "] Is Loading, Version: " + pdf.getVersion());
+        ipAccountConfig = new IPAccountConfig(plugin);
+
         ipAccountStorage = new IPAccountStorage(plugin);
         IPAccountListener ipAccountListener = new IPAccountListener(plugin);
         Bukkit.getServer().getPluginManager().registerEvents(ipAccountListener, plugin);
@@ -42,5 +45,9 @@ public class IPAccountLimiter extends JavaPlugin {
 
     public IPAccountStorage getIpAccountStorage() {
         return ipAccountStorage;
+    }
+
+    public IPAccountConfig getIpAccountConfig() {
+        return ipAccountConfig;
     }
 }

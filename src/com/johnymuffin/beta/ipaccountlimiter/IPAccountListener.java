@@ -15,7 +15,7 @@ public class IPAccountListener implements Listener {
     public IPAccountListener(IPAccountLimiter plugin) {
         this.plugin = plugin;
         this.storage = plugin.getIpAccountStorage();
-        accountLimit = 6;
+        accountLimit = plugin.getIpAccountConfig().getConfigInteger("maximum-accounts-per-ip");
     }
 
     @EventHandler
