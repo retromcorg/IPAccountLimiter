@@ -2,3 +2,10 @@ name: IPAccountLimiter
 version: 1.0.1
 main: com.johnymuffin.beta.ipaccountlimiter.IPAccountLimiter
 author: JohnyMuffin
+softdepend: [EvolutionCore]
+commands:
+  ipremove:
+    description: Remove record of all usernames from IP
+permissions:
+  ipaccountlimiter.remove:
+    description: Permission for remove ip info

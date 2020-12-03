@@ -1,5 +1,9 @@
 package com.johnymuffin.beta.ipaccountlimiter;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
@@ -19,6 +23,8 @@ public class IPAccountConfig extends Configuration {
         //Setting
         generateConfigOption("maximum-accounts-per-ip", 6);
         generateConfigOption("forget-ip-after", 15552000);
+        generateConfigOption("beta-evolutions.user-bypass", true);
+        generateConfigOption("beta-evolutions.info", "Allows BetaEVO authenticated players to bypass the account limit checks. Requires Poseidon.");
 
 
     }

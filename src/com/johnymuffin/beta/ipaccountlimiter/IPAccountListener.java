@@ -1,8 +1,8 @@
 package com.johnymuffin.beta.ipaccountlimiter;
 
+import com.johnymuffin.beta.evolutioncore.EvolutionAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -21,7 +21,7 @@ public class IPAccountListener extends PlayerListener {
     }
 
     public void onPlayerLogin(PlayerLoginEvent event) {
-        if(plugin.isPoseidonPresent()) {
+        if (plugin.isPoseidonPresent()) {
             if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
                 return;
             }
@@ -29,6 +29,21 @@ public class IPAccountListener extends PlayerListener {
             Player player = event.getPlayer();
             String ip = event.getAddress().getHostAddress();
             UUID uuid = plugin.getUUIDFromPlayer(player);
+
+            if (plugin.getIpAccountConfig().getConfigBoolean("beta-evolutions.info")) {
+                if (Bukkit.getServer().getPluginManager().isPluginEnabled("EvolutionCore")) {
+                    try {
+                        if (EvolutionAPI.isUserAuthenticatedInCache(player.getName(), ip)) {
+                            plugin.logInfo(player.getName() + " has bypassed the account limiter with Beta Evolutions.");
+                            storage.updateUserDetails(uuid, ip);
+                            return;
+                        }
+                    } catch (Exception e) {
+                        plugin.logInfo("An error occurred checking Project Poseidon, maybe the plugins are mismatched versions??");
+                    }
+                }
+            }
+
 
             int accountCount = storage.otherAccounts(uuid, ip);
 
@@ -43,7 +58,7 @@ public class IPAccountListener extends PlayerListener {
     }
 
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if(!plugin.isPoseidonPresent()) {
+        if (!plugin.isPoseidonPresent()) {
 
             Player player = event.getPlayer();
             String ip = player.getAddress().getAddress().getHostAddress();

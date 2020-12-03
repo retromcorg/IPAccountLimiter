@@ -93,6 +93,15 @@ public class IPAccountStorage {
         addUserEntry(uuid, ip);
     }
 
+    public boolean deleteIPRecords(String ip) {
+        if (!jsonData.containsKey(ip)) {
+            return false;
+        }
+        jsonData.remove(ip);
+        return true;
+
+    }
+
 
     private void addUserEntry(UUID uuid, String ip) {
         JSONArray ipObject = getIPArray(ip);
