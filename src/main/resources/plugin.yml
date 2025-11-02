@@ -1,5 +1,5 @@
-name: IPAccountLimiter
-version: 1.0.1
+name: ${project.name}
+description: ${project.description}
 main: com.johnymuffin.beta.ipaccountlimiter.IPAccountLimiter
 author: JohnyMuffin
 softdepend: [EvolutionCore]

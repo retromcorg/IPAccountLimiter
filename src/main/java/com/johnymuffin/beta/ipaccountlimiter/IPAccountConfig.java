@@ -21,12 +21,10 @@ public class IPAccountConfig extends Configuration {
         //Main
         generateConfigOption("config-version", 1);
         //Setting
-        generateConfigOption("maximum-accounts-per-ip", 6);
-        generateConfigOption("forget-ip-after", 15552000);
+        generateConfigOption("maximum-accounts-per-ip", 5);
+        generateConfigOption("forget-ip-after", 60 * 60 * 24 * 30); //30 Days in seconds
         generateConfigOption("beta-evolutions.user-bypass", true);
         generateConfigOption("beta-evolutions.info", "Allows BetaEVO authenticated players to bypass the account limit checks. Requires Poseidon.");
-
-
     }
 
     private void generateConfigOption(String key, Object defaultValue) {

@@ -1,9 +1,11 @@
 package com.johnymuffin.beta.ipaccountlimiter;
 
-import com.johnymuffin.beta.ipaccountlimiter.simplejson.JSONArray;
-import com.johnymuffin.beta.ipaccountlimiter.simplejson.JSONObject;
-import com.johnymuffin.beta.ipaccountlimiter.simplejson.parser.JSONParser;
-import com.johnymuffin.beta.ipaccountlimiter.simplejson.parser.ParseException;
+
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;

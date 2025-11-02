@@ -229,3 +229,4 @@ hs_err_pid*
 
 # Remvoe server stuff from path
 /server/
+target/
